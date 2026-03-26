@@ -1,0 +1,42 @@
+[gd_scene format=4 uid="uid://mwwgneue6mar"]
+
+[ext_resource type="PackedScene" uid="uid://bqowthlt0kkq3" path="res://scenes/world_elements/PlayerCharacter.tscn" id="1_u823w"]
+[ext_resource type="TileSet" uid="uid://dimo0qa4w003h" path="res://assets/tilesets/nature_tileset.tres" id="2_bif32"]
+[ext_resource type="TileSet" uid="uid://ciax1w5addyol" path="res://assets/tilesets/rock_tileset.tres" id="3_saopw"]
+[ext_resource type="TileSet" uid="uid://bd55nd34nb6qd" path="res://assets/tilesets/floor_tileset.tres" id="4_2oje7"]
+[ext_resource type="TileSet" uid="uid://cpfwhxp1n7cjd" path="res://assets/tilesets/walls_tileset.tres" id="5_4qadv"]
+
+[node name="World" type="Node2D" unique_id=1556080347]
+
+[node name="PlayerCharacter" parent="." unique_id=354763864 instance=ExtResource("1_u823w")]
+
+[node name="TileLayerContainer" type="Node2D" parent="." unique_id=649404594]
+
+[node name="FoliageLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=738978109]
+z_index = 7
+tile_map_data = PackedByteArray("AAAIAAYAAAAAAAEAAAAIAAcAAAAAAAIAAAAIAAgAAAAAAAMAAAAJAAYAAAABAAEAAAAJAAcAAAABAAIAAAAJAAgAAAABAAMAAAA=")
+tile_set = ExtResource("2_bif32")
+
+[node name="GroundLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=2083135038]
+tile_set = ExtResource("2_bif32")
+
+[node name="RockLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=764028440]
+z_index = 1
+tile_map_data = PackedByteArray("AAAGAA0AAAAAAAMAAAAHAA4AAAAAAAMAAAAIAA4AAAABAAMAAAAJAA4AAAABAAAAAAAKAA4AAAABAAIAAAALAA4AAAABAAIAAAALAA0AAAABAAIAAAAMAA0AAAACAAAAAAANAA0AAAABAAMAAAAOAA0AAAABAAAAAAAPAA0AAAACAAIAAAAPAA4AAAACAAIAAAAOAA4AAAAAAAIAAAAOAA8AAAAAAAIAAAAOABAAAAAAAAMAAAAPAA8AAAACAAIAAAAMAA4AAAACAAIAAAALAA8AAAABAAMAAAAMAA8AAAACAAMAAAAKAA8AAAABAAMAAAAJAA8AAAAAAAMAAAAKAA0AAAABAAIAAAAJAA0AAAABAAIAAAAIAA0AAAABAAIAAAAHAA0AAAABAAAAAAAHAAwAAAABAAEAAAAIAAwAAAABAAEAAAAJAAwAAAABAAIAAAAMAAwAAAABAAIAAAANAAwAAAABAAIAAAAOAAwAAAABAAEAAAALAAwAAAABAAIAAAAKAAwAAAABAAIAAAAGAAwAAAAAAAEAAAAPAAwAAAACAAEAAAAPABAAAAACAAMAAAANAAsAAAACAAEAAAAMAAsAAAABAAEAAAALAAsAAAABAAEAAAAKAAsAAAABAAEAAAAJAAsAAAAAAAEAAAA=")
+tile_set = ExtResource("3_saopw")
+
+[node name="FloorLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=1365605647]
+z_index = 2
+tile_set = ExtResource("4_2oje7")
+
+[node name="WallsLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=1082915227]
+z_index = 6
+tile_set = ExtResource("5_4qadv")
+
+[node name="BoundaryLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=285671931]
+z_index = 11
+tile_set = ExtResource("2_bif32")
+
+[node name="GoalLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=1008049985]
+z_index = 3
+tile_set = ExtResource("2_bif32")
