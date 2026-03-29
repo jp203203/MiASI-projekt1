@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://mwwgneue6mar"]
 
+[ext_resource type="Script" uid="uid://bf5gwf1a32cal" path="res://scripts/levels/World.cs" id="1_2oje7"]
 [ext_resource type="PackedScene" uid="uid://bqowthlt0kkq3" path="res://scenes/world_elements/PlayerCharacter.tscn" id="1_u823w"]
 [ext_resource type="TileSet" uid="uid://dimo0qa4w003h" path="res://assets/tilesets/nature_tileset.tres" id="2_bif32"]
 [ext_resource type="TileSet" uid="uid://ciax1w5addyol" path="res://assets/tilesets/rock_tileset.tres" id="3_saopw"]
@@ -7,6 +8,7 @@
 [ext_resource type="TileSet" uid="uid://cpfwhxp1n7cjd" path="res://assets/tilesets/walls_tileset.tres" id="5_4qadv"]
 
 [node name="World" type="Node2D" unique_id=1556080347]
+script = ExtResource("1_2oje7")
 
 [node name="PlayerCharacter" parent="." unique_id=354763864 instance=ExtResource("1_u823w")]
 
@@ -18,6 +20,7 @@ tile_map_data = PackedByteArray("AAAIAAYAAAAAAAEAAAAIAAcAAAAAAAIAAAAIAAgAAAAAAAM
 tile_set = ExtResource("2_bif32")
 
 [node name="GroundLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=2083135038]
+tile_map_data = PackedByteArray("AAATAAsAAAAAAAAAAAAUAAsAAAAAAAAAAAAUAAoAAAAAAAAAAAAVAAoAAAAAAAAAAAAWAAoAAAAAAAAAAAAXAAoAAAAAAAAAAAAXAAkAAAAAAAAAAAAYAAoAAAAAAAAAAAAYAAsAAAAAAAAAAAAYAAwAAAAAAAAAAAAXAAwAAAAAAAAAAAAXAA0AAAAAAAAAAAAWAA0AAAAAAAAAAAAVAA0AAAAAAAAAAAAVAAwAAAAAAAAAAAAVAAsAAAAAAAAAAAAWAAsAAAAAAAAAAAAXAAsAAAAAAAAAAAAWAAwAAAAAAAAAAAAVAA4AAAAAAAAAAAAUAA4AAAAAAAAAAAATAA4AAAAAAAAAAAASAA4AAAAAAAAAAAASAA0AAAAAAAAAAAATAAwAAAAAAAAAAAAUAAwAAAAAAAAAAAAUAA0AAAAAAAAAAAATAA0AAAAAAAAAAAASAAwAAAAAAAAAAAATAAoAAAAAAAAAAAA=")
 tile_set = ExtResource("2_bif32")
 
 [node name="RockLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=764028440]
