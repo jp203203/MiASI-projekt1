@@ -7,29 +7,31 @@ public partial class World : Node2D
     public PlayerCharacter PlayerCharacter;
     public TileMapLayer BoundaryLayer;
 
-    [Export]
-    public Clock Clock;
+    private Clock _clock = Clock.Instance;
 
     // level data ref here?
 
     public override void _Ready()
     {
+        PlayerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
+        BoundaryLayer = GetNode<TileMapLayer>("TileLayerContainer/BoundaryLayer");
+
         // load level data here probably
 
-        Clock.Pause();
+        _clock.Pause();
     }
 
     public void StartCodeExecution()
     {
-        Clock.Resume();
+        _clock.Resume();
     }
 
     public void ResetWorld()
     {
         PlayerCharacter.ResetToInitial();
 
-        Clock.Reset();
-        Clock.Pause();
+        _clock.Reset();
+        _clock.Pause();
     }
 
     public bool IsLevelComplete()

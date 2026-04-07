@@ -2,12 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dw0cipxaxlejq" path="res://scripts/world_elements/PlayerCharacter.cs" id="1_8xf31"]
 [ext_resource type="Texture2D" uid="uid://deq4ygwd5hql8" path="res://assets/sprites/sprite.png" id="1_fgt8d"]
+[ext_resource type="PackedScene" uid="uid://c17dgw7kb3irk" path="res://scenes/world_elements/Shield.tscn" id="2_fsoqc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8xf31"]
 size = Vector2(32, 32)
 
 [node name="PlayerCharacter" type="CharacterBody2D" unique_id=354763864]
 script = ExtResource("1_8xf31")
+ShieldScene = ExtResource("2_fsoqc")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1467741725]
 z_index = 2

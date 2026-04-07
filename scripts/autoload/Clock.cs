@@ -4,6 +4,8 @@ using System;
 [GlobalClass]
 public partial class Clock : Node
 {
+    public static Clock Instance { get; private set; }
+
     [Signal]
     public delegate void TickEventHandler(int currentTurn);
 
@@ -16,6 +18,8 @@ public partial class Clock : Node
 
     public override void _Ready()
     {
+        Instance = this;
+
         _timer = new Timer();
         _timer.WaitTime = _stepDuration;
         _timer.Autostart = true;

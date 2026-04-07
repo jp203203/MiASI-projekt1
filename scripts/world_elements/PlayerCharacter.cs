@@ -14,7 +14,7 @@ public partial class PlayerCharacter : GridMover
 
     Vector2 PendingDirection = Vector2.Zero;
     string PendingAction = "";
-    bool HasShield = false;
+    public bool HasShield = false;
     Node2D ShieldNode = null;
     Vector2 InitialPosition;
     Vector2I InitialTile;

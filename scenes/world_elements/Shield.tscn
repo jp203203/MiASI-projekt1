@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c17dgw7kb3irk"]
+
+[ext_resource type="Texture2D" uid="uid://dckscnh0xhv17" path="res://assets/sprites/shield.png" id="1_pfdsh"]
+
+[node name="Shield" type="Sprite2D" unique_id=726150904]
+texture = ExtResource("1_pfdsh")

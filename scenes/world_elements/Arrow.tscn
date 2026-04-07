@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dygnt8dbe2uoa"]
+
+[ext_resource type="Script" uid="uid://ble0wsumqqhid" path="res://scripts/world_elements/Arrow.cs" id="1_eqflk"]
+[ext_resource type="Texture2D" uid="uid://ct4nh5hm73fyx" path="res://assets/sprites/arrow.png" id="2_q2ubv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tg8in"]
+size = Vector2(4, 18)
+
+[node name="Arrow" type="CharacterBody2D" unique_id=890867779]
+script = ExtResource("1_eqflk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1199472650]
+texture = ExtResource("2_q2ubv")
+
+[node name="CollisionArea" type="Area2D" parent="." unique_id=860554148]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea" unique_id=1052159824]
+shape = SubResource("RectangleShape2D_tg8in")
