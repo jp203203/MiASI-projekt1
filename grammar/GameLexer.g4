@@ -1,4 +1,4 @@
-lexer grammar gierkalang ;
+lexer grammar GameLexer ;
 
 // -------------------- KEYWORDS --------------------
 
@@ -36,6 +36,16 @@ GT          : '>';
 LT          : '<';
 GE          : '>=';
 LE          : '<=';
+
+COLON       : ':';
+COMMA       : ',';
+LPAREN      : '(';
+RPAREN      : ')';
+EQSIGN      : '=';
+ADD         : '+';
+SUB         : '-';
+MUL         : '*';
+DIV         : '/';
 
 // -------------------- IDENTIFIERS & LITERALS --------------------
 

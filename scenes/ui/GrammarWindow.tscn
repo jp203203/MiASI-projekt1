@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cao7gho5ku831"]
+
+[ext_resource type="Script" uid="uid://ltyrrv1bf56y" path="res://scripts/grammar/GrammarWindow.cs" id="1_gnlo8"]
+
+[node name="GrammarWindow" type="Panel" unique_id=2036535493]
+offset_left = 192.0
+offset_top = 128.0
+offset_right = 960.0
+offset_bottom = 512.0
+script = ExtResource("1_gnlo8")
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=1533817853]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 32.0
+offset_right = 640.0
+offset_bottom = 256.0
+placeholder_text = "Enter code here..."
+
+[node name="Button" type="Button" parent="." unique_id=947117926]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 288.0
+offset_right = 504.0
+offset_bottom = 352.0
+text = "RUN"
+
+[connection signal="pressed" from="Button" to="." method="OnParseButtonPressed"]

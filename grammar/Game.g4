@@ -1,7 +1,7 @@
-grammar gierkalang;
+parser grammar Game;
 
 options {
-    tokenVocab = gierkalangLexer;
+    tokenVocab = GameLexer;
 }
 
 // -------------------- PARSER RULES --------------------
