@@ -7,15 +7,15 @@ public partial class GridMover : CharacterBody2D
     [Export]
     protected int MoveSpeed = 150;
     [Export]
-    protected TileMapLayer GroundLayer;
+    public TileMapLayer GroundLayer { get; set; }
     [Export]
-    protected TileMapLayer RockLayer;
+    public TileMapLayer RockLayer;
     [Export]
-    protected TileMapLayer FoliageLayer;
+    public TileMapLayer FoliageLayer;
     [Export]
-    protected TileMapLayer WallsLayer;
+    public TileMapLayer WallsLayer;
     [Export]
-    protected TileMapLayer BoundaryLayer;
+    public TileMapLayer BoundaryLayer;
 
     protected Vector2 TargetPosition;
     protected bool IsMoving = false;

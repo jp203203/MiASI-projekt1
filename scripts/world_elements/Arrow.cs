@@ -9,9 +9,9 @@ public partial class Arrow : GridMover
     public delegate void PlayerHitWithoutShieldEventHandler();
 
     [Export]
-    private Vector2 _direction = Vector2.Zero;
+    public Vector2 Direction = Vector2.Zero;
     [Export]
-    private PlayerCharacter _playerCharacter;
+    public PlayerCharacter PlayerCharacter;
 
     private Area2D _collisionArea;
     private Sprite2D _sprite;
@@ -39,9 +39,9 @@ public partial class Arrow : GridMover
 
     private void RotateSpriteForDirection()
     {
-        if (_direction == Vector2.Left)
+        if (Direction == Vector2.Left)
             _sprite.Rotation = float.Pi * 0.5f;
-        else if (_direction == Vector2.Right)
+        else if (Direction == Vector2.Right)
             _sprite.Rotation = -float.Pi * 0.5f;
     }
 
@@ -53,7 +53,7 @@ public partial class Arrow : GridMover
     private async Task MoveOneTile()
     {
         Vector2I currentTile = GroundLayer.LocalToMap(Position);
-        Vector2I nextTile = currentTile + (Vector2I)_direction;
+        Vector2I nextTile = currentTile + (Vector2I)Direction;
 
         // remove the arrow on collision
         if (IsTileBlocked(nextTile))
@@ -70,11 +70,11 @@ public partial class Arrow : GridMover
     private void OnBodyEntered(Node body)
     {
         // only player collision matters
-        if (body != _playerCharacter) return;
+        if (body != PlayerCharacter) return;
 
         // check for shield
-        if (_playerCharacter.HasShield)
-            _playerCharacter.BreakShield();
+        if (PlayerCharacter.HasShield)
+            PlayerCharacter.BreakShield();
         else
             EmitSignal(SignalName.PlayerHitWithoutShield);
 
