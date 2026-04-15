@@ -48,6 +48,8 @@ tile_set = ExtResource("2_bif32")
 z_index = 3
 tile_set = ExtResource("2_bif32")
 
+[node name="Camera2D" type="Camera2D" parent="." unique_id=714311414]
+
 [node name="WallShooterManager" type="Node" parent="." unique_id=1592845632 node_paths=PackedStringArray("_groundLayer", "_rockLayer", "_foliageLayer", "_wallsLayer", "_boundaryLayer", "_playerCharacter")]
 script = ExtResource("7_4qadv")
 _groundLayer = NodePath("../TileLayerContainer/GroundLayer")
