@@ -25,9 +25,25 @@ texture_region_size = Vector2i(32, 32)
 1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
 2:3/0 = 0
 2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:0/0/custom_data_0 = true
+3:0/0/custom_data_1 = 1
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:1/0/custom_data_0 = true
+3:1/0/custom_data_1 = 2
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:2/0/custom_data_0 = true
+3:2/0/custom_data_1 = 3
 
 [resource]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "IsItem"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "ItemQuantity"
+custom_data_layer_1/type = 2
 sources/0 = SubResource("TileSetAtlasSource_h0mae")
 pattern_0 = SubResource("TileMapPattern_ocre5")

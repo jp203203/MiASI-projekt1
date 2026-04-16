@@ -15,6 +15,7 @@ script = ExtResource("1_2oje7")
 _levelData = ExtResource("2_wt5f5")
 
 [node name="PlayerCharacter" parent="." unique_id=354763864 instance=ExtResource("1_u823w")]
+z_index = 3
 
 [node name="TileLayerContainer" type="Node2D" parent="." unique_id=649404594]
 
@@ -45,6 +46,10 @@ z_index = 11
 tile_set = ExtResource("2_bif32")
 
 [node name="GoalLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=1008049985]
+z_index = 3
+tile_set = ExtResource("2_bif32")
+
+[node name="ItemLayer" type="TileMapLayer" parent="TileLayerContainer" unique_id=1780620190]
 z_index = 3
 tile_set = ExtResource("2_bif32")
 

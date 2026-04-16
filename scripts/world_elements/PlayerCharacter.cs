@@ -12,12 +12,19 @@ public partial class PlayerCharacter : GridMover
     [Export]
     PackedScene ShieldScene;
 
-    Vector2 PendingDirection = Vector2.Zero;
+    private Clock _clock = Clock.Instance;
+
+    private static readonly Vector2[] Directions = { Vector2.Down, Vector2.Left, Vector2.Up, Vector2.Right };
+    private int _directionIdx = 0;
+    Vector2 ActiveDirection;
+
     string PendingAction = "";
     public bool HasShield = false;
     Node2D ShieldNode = null;
     Vector2 InitialPosition;
     Vector2I InitialTile;
+
+    private bool _itemTaken = false;
 
     // special tile movement rules
     static readonly Dictionary<string, Dictionary<string, Vector2[]>> TileRules = new()
@@ -53,7 +60,10 @@ public partial class PlayerCharacter : GridMover
         InitialPosition = Position;
         InitialTile = GroundLayer.LocalToMap(Position);
 
+        ActiveDirection = Directions[_directionIdx];
+
         // connect to turn clock
+        _clock.Tick += OnTurnTick;
     }
 
     private void OnTurnTick(int turnIndex)
@@ -69,10 +79,9 @@ public partial class PlayerCharacter : GridMover
         }
 
         // 2nd priority - move in pending direction
-        if (PendingDirection != Vector2.Zero)
+        if (ActiveDirection != Vector2.Zero)
         {
             ExecutePendingMove();
-            PendingDirection = Vector2.Zero;
         }
     }
 
@@ -82,6 +91,12 @@ public partial class PlayerCharacter : GridMover
         {
             case "shield":
                 ActivateShield();
+                break;
+            case "take":
+                TakeItem();
+                break;
+            case "drop":
+                DropItem();
                 break;
             default:
                 GD.PushWarning("Unknown action: ", PendingAction);
@@ -93,9 +108,9 @@ public partial class PlayerCharacter : GridMover
     private async Task ExecutePendingMove()
     {
         Vector2I currentTile = GroundLayer.LocalToMap(Position);
-        Vector2I nextTile = currentTile + (Vector2I)(PendingDirection);
+        Vector2I nextTile = currentTile + (Vector2I)(ActiveDirection);
 
-        if (CanMoveFrom(currentTile, PendingDirection) && CanMoveTo(nextTile, PendingDirection))
+        if (CanMoveFrom(currentTile, ActiveDirection) && CanMoveTo(nextTile, ActiveDirection))
         {
             await MoveToTile(nextTile);
         }
@@ -166,15 +181,66 @@ public partial class PlayerCharacter : GridMover
         HasShield = false;
     }
 
+    private void TakeItem()
+    {
+        if (_itemTaken) return;  // player can't pick up more than one item at once
+
+        Vector2I itemTile = ItemLayer.LocalToMap(Position) + (Vector2I)ActiveDirection;
+
+        TileData item = ItemLayer.GetCellTileData(itemTile);
+
+        if (item != null && (bool)item.GetCustomData("IsItem"))
+        {
+            // item manager here
+
+            _itemTaken = true;
+        }
+    }
+    
+    private void DropItem()
+    {
+        if (!_itemTaken) return;  // player can't drop an item if they're not holding one
+
+        Vector2I itemTile = ItemLayer.LocalToMap(Position) + (Vector2I)ActiveDirection;
+
+        TileData item = ItemLayer.GetCellTileData(itemTile);
+
+        // condition: if there's no item in that space or if the item quantity is less than 3
+        if (item == null || ((bool)item.GetCustomData("IsItem") && (int)item.GetCustomData("ItemQuantity") < 3))
+        {
+            // item manager here
+
+            _itemTaken = false;
+        }
+    }
+
     public void ResetToInitial()
     {
         Position = InitialPosition;
         TargetPosition = InitialPosition;
         CanMove = true;
-        PendingDirection = Vector2.Zero;
+        ActiveDirection = Directions[0];
         PendingAction = "";
         IsMoving = false;
 
         if (HasShield) BreakShield();
+    }
+
+    public void Rotate(string direction)
+    {
+        if (direction != "left" || direction != "right")
+            GD.PushError("Incorrect rotation direction");
+
+        switch (direction)
+        {
+            case "right":
+                _directionIdx = (_directionIdx + 1) % 4;
+                break;
+            case "left":
+                _directionIdx = (_directionIdx - 1 + 4) % 4;
+                break;
+        }
+
+        ActiveDirection = Directions[_directionIdx];
     }
 }

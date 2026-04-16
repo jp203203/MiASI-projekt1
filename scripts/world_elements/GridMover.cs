@@ -16,6 +16,8 @@ public partial class GridMover : CharacterBody2D
     public TileMapLayer WallsLayer;
     [Export]
     public TileMapLayer BoundaryLayer;
+    [Export]
+    public TileMapLayer ItemLayer;
 
     protected Vector2 TargetPosition;
     protected bool IsMoving = false;
@@ -52,7 +54,7 @@ public partial class GridMover : CharacterBody2D
     // check if object collides with the next tile in one of the layers
     protected bool IsTileBlocked(Vector2I tile)
     {
-        TileMapLayer[] layers = [GroundLayer, RockLayer, FoliageLayer, WallsLayer, BoundaryLayer];
+        TileMapLayer[] layers = [GroundLayer, RockLayer, FoliageLayer, WallsLayer, BoundaryLayer, ItemLayer];
 
         foreach (TileMapLayer layer in layers)
         {
