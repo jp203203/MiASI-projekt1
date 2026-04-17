@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 public partial class PlayerCharacter : GridMover
 {
-    [Export]
-    bool CanMove = true;
-    [Export]
-    PackedScene ShieldScene;
+    [Export] bool CanMove = true;
+    [Export] PackedScene ShieldScene;
+    [Export] public ItemManager ItemManager;
+
 
     private Clock _clock = Clock.Instance;
 
@@ -141,7 +141,7 @@ public partial class PlayerCharacter : GridMover
     private bool CanMoveTo(Vector2I tile, Vector2 direction)
     {
         // check collision first
-        if (IsTileBlocked(tile)) return false;
+        if (IsTileBlocked(tile, false)) return false;
 
         // check special rules
         TileData tileData = RockLayer.GetCellTileData(tile);
@@ -185,14 +185,16 @@ public partial class PlayerCharacter : GridMover
     {
         if (_itemTaken) return;  // player can't pick up more than one item at once
 
+
         Vector2I itemTile = ItemLayer.LocalToMap(Position) + (Vector2I)ActiveDirection;
+
+        if (IsTileBlocked(itemTile, true)) return;  // if there is anything else blocking the way - return (item shouldn't be there)
 
         TileData item = ItemLayer.GetCellTileData(itemTile);
 
         if (item != null && (bool)item.GetCustomData("IsItem"))
         {
-            // item manager here
-
+            ItemManager.RemoveItem(itemTile);
             _itemTaken = true;
         }
     }
@@ -203,13 +205,14 @@ public partial class PlayerCharacter : GridMover
 
         Vector2I itemTile = ItemLayer.LocalToMap(Position) + (Vector2I)ActiveDirection;
 
+        if (IsTileBlocked(itemTile, true)) return;  // can't drop an item if there's something blocking the way
+
         TileData item = ItemLayer.GetCellTileData(itemTile);
 
         // condition: if there's no item in that space or if the item quantity is less than 3
         if (item == null || ((bool)item.GetCustomData("IsItem") && (int)item.GetCustomData("ItemQuantity") < 3))
         {
-            // item manager here
-
+            ItemManager.PlaceItem(itemTile);
             _itemTaken = false;
         }
     }

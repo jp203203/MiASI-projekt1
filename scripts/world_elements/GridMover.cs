@@ -52,22 +52,23 @@ public partial class GridMover : CharacterBody2D
     }
 
     // check if object collides with the next tile in one of the layers
-    protected bool IsTileBlocked(Vector2I tile)
+    protected bool IsTileBlocked(Vector2I tile, bool checkForItem = false)
     {
         TileMapLayer[] layers = [GroundLayer, RockLayer, FoliageLayer, WallsLayer, BoundaryLayer, ItemLayer];
 
-        foreach (TileMapLayer layer in layers)
+        int layersToCheck = checkForItem ? 6 : 5;
+
+        for (int i = 0; i < layersToCheck; i++)
         {
             // extract tile data and check for a collision shape
-            if (layer != null)
+            if (layers[i] != null)
             {
-                TileData tileData = layer.GetCellTileData(tile);
+                TileData tileData = layers[i].GetCellTileData(tile);
                 if (tileData != null && tileData.GetCollisionPolygonsCount(0) > 0)
                 {
                     return true;
                 }
             }
-
         }
 
         return false;

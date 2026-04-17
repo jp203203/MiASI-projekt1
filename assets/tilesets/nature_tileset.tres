@@ -1,6 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://dimo0qa4w003h"]
 
 [ext_resource type="Texture2D" uid="uid://3bg51dj237vh" path="res://assets/tilesets/nature_atlas.png" id="1_jnfht"]
+[ext_resource type="Script" uid="uid://ex2bv4af7dh7" path="res://scripts/world_elements/ItemManager.cs" id="1_ocre5"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_ocre5"]
 tile_data = PackedInt32Array(0, 0, 1, 65536, 0, 2, 131072, 0, 3, 1, 65536, 1, 65537, 65536, 2, 131073, 65536, 3)
@@ -47,3 +48,4 @@ custom_data_layer_1/name = "ItemQuantity"
 custom_data_layer_1/type = 2
 sources/0 = SubResource("TileSetAtlasSource_h0mae")
 pattern_0 = SubResource("TileMapPattern_ocre5")
+script = ExtResource("1_ocre5")

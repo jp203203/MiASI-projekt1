@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="MiASI-game"
+run/main_scene="uid://cao7gho5ku831"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
