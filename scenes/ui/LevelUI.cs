@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 
 public partial class LevelUI : Control
 {
@@ -104,6 +106,26 @@ public partial class LevelUI : Control
         _runButton.Text = "RUNNING...";
 
         // SYNTAX VALIDATION AND CODE EXECUTION HERE
+        string text = _codeEditor.Text;
+
+        try
+        {
+            var inputStream = new AntlrInputStream(text);
+            var lexer = new GameLexer(inputStream);
+            var tokens = new CommonTokenStream(lexer);
+            var parser = new Game(tokens);
+
+            var tree = parser.program();
+
+            var visitor = new GameVisitor();
+            object result = visitor.Visit(tree);
+
+            _errorDisplay.Text = $"Result: {result}";
+        }
+        catch (Exception ex)
+        {
+            _errorDisplay.Text = $"Error: {ex.Message}";
+        }
 
         // check if level was completed
         if (_world.IsLevelComplete())
