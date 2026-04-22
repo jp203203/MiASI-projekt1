@@ -6,16 +6,29 @@ using System.Collections.Generic;
 public class GameVisitor : GameBaseVisitor<object>
 {
 	private Dictionary<string, int> variables = new Dictionary<string, int>();
+	private Dictionary<string, Game.ProcedureDeclContext> procedures
+	= new Dictionary<string, Game.ProcedureDeclContext>();
+	private Stack<Dictionary<string, int>> scopes;
+	
+	public GameVisitor()
+	{
+		scopes = new Stack<Dictionary<string, int>>();
+		scopes.Push(new Dictionary<string, int>()); // global scope
+	}
 	
 	public override object VisitMoveCommand(Game.MoveCommandContext context)
 	{
-		GD.Print("TEMP: move");
+		int tiles = (int)Visit(context.expr());
+		
+		GD.Print($"TEMP: move {tiles} tiles");
 		return 0;
 	}
 	
 	public override object VisitRotateCommand(Game.RotateCommandContext context)
 	{
-		GD.Print("TEMP: rotate");
+		string direction = context.direction().GetText();
+		
+		GD.Print($"TEMP: rotate to face {direction}");
 		return 0;
 	}
 	
@@ -75,6 +88,88 @@ public class GameVisitor : GameBaseVisitor<object>
 		return null;
 	}
 	
+	public override object VisitProcedureDecl(Game.ProcedureDeclContext context)
+	{
+		string name = context.ID().GetText();
+
+		procedures[name] = context;
+
+		GD.Print($"Defined procedure: {name}");
+
+		return null;
+	}
+	
+	// procedure call is defined as both statement and expression -
+	// having it only as statement made the grammar see the
+	// recursive call as variable instead of procedure.
+	// this approach fixed recursive calls
+	
+	private List<int> EvaluateArgs(Game.ArgListContext argList)
+	{
+		var args = new List<int>();
+
+		if (argList == null)
+			return args;
+
+		foreach (var expr in argList.expr())
+			args.Add((int)Visit(expr));
+
+		return args;
+	}
+	
+	// procedure call as expr
+	public override object VisitProcCallExpr(Game.ProcCallExprContext context)
+	{
+		return ExecuteCall(
+			context.ID().GetText(),
+			EvaluateArgs(context.argList())
+		);
+	}
+	
+	// procedure call as statement
+	public override object VisitProcedureCall(Game.ProcedureCallContext context)
+	{
+		ExecuteCall(
+			context.ID().GetText(),
+			EvaluateArgs(context.argList())
+		);
+
+		return null;
+	}
+	
+	// procedure as expr and as statement both lead here
+	private object ExecuteCall(string name, List<int> argValues)
+	{
+		if (!procedures.ContainsKey(name))
+			throw new Exception($"Undefined procedure: {name}");
+
+		var proc = procedures[name];
+
+		var paramNames = new List<string>();
+
+		if (proc.paramList() != null)
+		{
+			foreach (var id in proc.paramList().ID())
+				paramNames.Add(id.GetText());
+		}
+
+		if (argValues.Count != paramNames.Count)
+			throw new Exception($"Procedure '{name}' expects {paramNames.Count} args, got {argValues.Count}");
+
+		var localScope = new Dictionary<string, int>();
+
+		for (int i = 0; i < paramNames.Count; i++)
+			localScope[paramNames[i]] = argValues[i];
+
+		scopes.Push(localScope);
+
+		Visit(proc.block());
+
+		scopes.Pop();
+
+		return null;
+	}
+	
 	public override object VisitBlock(Game.BlockContext context)
 	{
 		foreach (var stmt in context.statement())
@@ -90,7 +185,7 @@ public class GameVisitor : GameBaseVisitor<object>
 		string name = context.ID().GetText();
 		int value = (int)Visit(context.expr());
 
-		variables[name] = value;
+		SetVariable(name, value);
 
 		GD.Print($"Set {name} = {value}");
 
@@ -164,15 +259,26 @@ public class GameVisitor : GameBaseVisitor<object>
 	{
 		string name = context.ID().GetText();
 
-		if (!variables.ContainsKey(name))
-		{
-			throw new Exception($"Undefined variable: {name}");
-		}
-
-		int value = variables[name];
+		int value = GetVariable(name);
 
 		GD.Print($"Using variable {name} = {value}");
 
 		return value;
+	}
+	
+	private void SetVariable(string name, int value)
+	{
+		scopes.Peek()[name] = value;
+	}
+
+	private int GetVariable(string name)
+	{
+		foreach (var scope in scopes)
+		{
+			if (scope.ContainsKey(name))
+				return scope[name];
+		}
+
+		throw new Exception($"Undefined variable: {name}");
 	}
 }

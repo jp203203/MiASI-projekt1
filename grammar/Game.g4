@@ -132,6 +132,7 @@ expr
     : expr op=('*'|'/') expr      # MulDivExpr
     | expr op=('+'|'-') expr      # AddSubExpr
     | INT                         # IntLiteralExpr
+	| ID '(' argList? ')'         # ProcCallExpr
     | ID                          # VarExpr
     | '(' expr ')'                # ParenExpr
     ;

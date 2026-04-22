@@ -287,6 +287,18 @@ public interface IGameListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitVarExpr([NotNull] Game.VarExprContext context);
 	/// <summary>
+	/// Enter a parse tree produced by the <c>ProcCallExpr</c>
+	/// labeled alternative in <see cref="Game.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterProcCallExpr([NotNull] Game.ProcCallExprContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>ProcCallExpr</c>
+	/// labeled alternative in <see cref="Game.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitProcCallExpr([NotNull] Game.ProcCallExprContext context);
+	/// <summary>
 	/// Enter a parse tree produced by the <c>ParenExpr</c>
 	/// labeled alternative in <see cref="Game.expr"/>.
 	/// </summary>

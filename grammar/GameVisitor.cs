@@ -185,6 +185,13 @@ public interface IGameVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVarExpr([NotNull] Game.VarExprContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>ProcCallExpr</c>
+	/// labeled alternative in <see cref="Game.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitProcCallExpr([NotNull] Game.ProcCallExprContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>ParenExpr</c>
 	/// labeled alternative in <see cref="Game.expr"/>.
 	/// </summary>
