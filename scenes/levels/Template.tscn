@@ -9,6 +9,7 @@
 [ext_resource type="TileSet" uid="uid://cpfwhxp1n7cjd" path="res://assets/tilesets/walls_tileset.tres" id="5_4qadv"]
 [ext_resource type="Script" uid="uid://ct6c6xpeowhjl" path="res://scripts/world_elements/WallShooterManager.cs" id="7_4qadv"]
 [ext_resource type="PackedScene" uid="uid://dygnt8dbe2uoa" path="res://scenes/world_elements/Arrow.tscn" id="9_1h5o6"]
+[ext_resource type="Script" uid="uid://ex2bv4af7dh7" path="res://scripts/world_elements/ItemManager.cs" id="10_1h5o6"]
 
 [node name="World" type="Node2D" unique_id=1556080347]
 script = ExtResource("1_2oje7")
@@ -64,12 +65,13 @@ tile_set = ExtResource("2_bif32")
 
 [node name="WallShooterManager" type="Node" parent="." unique_id=1592845632 node_paths=PackedStringArray("_groundLayer", "_rockLayer", "_foliageLayer", "_wallsLayer", "_boundaryLayer", "_playerCharacter")]
 script = ExtResource("7_4qadv")
+_arrowScene = ExtResource("9_1h5o6")
 _groundLayer = NodePath("../TileLayerContainer/GroundLayer")
 _rockLayer = NodePath("../TileLayerContainer/RockLayer")
 _foliageLayer = NodePath("../TileLayerContainer/FoliageLayer")
 _wallsLayer = NodePath("../TileLayerContainer/WallsLayer")
 _boundaryLayer = NodePath("../TileLayerContainer/BoundaryLayer")
 _playerCharacter = NodePath("../PlayerCharacter")
-_arrowScene = ExtResource("9_1h5o6")
 
 [node name="ItemManager" type="Node" parent="." unique_id=1344242988]
+script = ExtResource("10_1h5o6")
