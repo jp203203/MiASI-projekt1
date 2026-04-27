@@ -117,8 +117,17 @@ public partial class LevelUI : Control
 
             var tree = parser.program();
 
-            var visitor = new GameVisitor();
+            var player = GetNodeOrNull<PlayerCharacter>("PlayerCharacter");
+
+            if (player == null)
+            {
+                GD.PrintErr("Player node not found!");
+                return;
+            }
+            
+            var visitor = new GameVisitor(player);
             object result = visitor.Visit(tree);
+            player.DebugPrintQueue();
 
             _errorDisplay.Text = $"Result: {result}";
         }

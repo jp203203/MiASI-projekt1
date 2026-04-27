@@ -11,7 +11,8 @@ public partial class PlayerCharacter : GridMover
     [Export] PackedScene ShieldScene;
     [Export] public ItemManager ItemManager;
 
-
+    private Queue<PlayerCommand> commandQueue = new Queue<PlayerCommand>();
+    
     private Clock _clock = Clock.Instance;
 
     private static readonly Vector2[] Directions = { Vector2.Down, Vector2.Left, Vector2.Up, Vector2.Right };
@@ -245,5 +246,21 @@ public partial class PlayerCharacter : GridMover
         }
 
         ActiveDirection = Directions[_directionIdx];
+    }
+    
+    public void DebugPrintQueue()
+    {
+        GD.Print("[DEBUG] Current command queue:");
+        
+        int i = 0;
+        foreach (var cmd in commandQueue)
+        {
+            GD.Print($"[{++i}] {cmd.Type} | Int: {cmd.IntParam} | Str: {cmd.StringParam}");
+        }
+    }
+    
+    public void EnqueueCommand(PlayerCommand command)
+    {
+        commandQueue.Enqueue(command);
     }
 }

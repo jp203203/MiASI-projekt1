@@ -9,9 +9,12 @@ public class GameVisitor : GameBaseVisitor<object>
 	private Dictionary<string, Game.ProcedureDeclContext> procedures
 	= new Dictionary<string, Game.ProcedureDeclContext>();
 	private Stack<Dictionary<string, int>> scopes;
+	private PlayerCharacter player;
 	
-	public GameVisitor()
+	public GameVisitor(PlayerCharacter player)
 	{
+		this.player = player;
+		
 		scopes = new Stack<Dictionary<string, int>>();
 		scopes.Push(new Dictionary<string, int>()); // global scope
 	}
@@ -19,35 +22,44 @@ public class GameVisitor : GameBaseVisitor<object>
 	public override object VisitMoveCommand(Game.MoveCommandContext context)
 	{
 		int tiles = (int)Visit(context.expr());
-		
-		GD.Print($"TEMP: move {tiles} tiles");
-		return 0;
+
+		player.EnqueueCommand(
+			new PlayerCommand(PlayerCommandType.Move, intParam: tiles)
+		);
+
+		return null;
 	}
 	
 	public override object VisitRotateCommand(Game.RotateCommandContext context)
 	{
 		string direction = context.direction().GetText();
-		
-		GD.Print($"TEMP: rotate to face {direction}");
-		return 0;
+
+		player.EnqueueCommand(
+			new PlayerCommand(PlayerCommandType.Rotate, stringParam: direction)
+		);
+
+		return null;
 	}
 	
 	public override object VisitTakeCommand(Game.TakeCommandContext context)
 	{
-		GD.Print("TEMP: take");
-		return 0;
+		player.EnqueueCommand(new PlayerCommand(PlayerCommandType.Take));
+		
+		return null;
 	}
 	
 	public override object VisitDropCommand(Game.DropCommandContext context)
 	{
-		GD.Print("TEMP: drop");
-		return 0;
+		player.EnqueueCommand(new PlayerCommand(PlayerCommandType.Drop));
+		
+		return null;
 	}
 	
 	public override object VisitShieldCommand(Game.ShieldCommandContext context)
 	{
-		GD.Print("TEMP: shield");
-		return 0;
+		player.EnqueueCommand(new PlayerCommand(PlayerCommandType.Shield));
+		
+		return null;
 	}
 	
 	public override object VisitIfStatement(Game.IfStatementContext context)
