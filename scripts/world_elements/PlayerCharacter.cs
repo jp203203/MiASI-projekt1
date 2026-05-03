@@ -58,7 +58,10 @@ public partial class PlayerCharacter : GridMover
     {
         base._Ready();
 
-        // store initial state for reset
+        Position = GroundLayer.MapToLocal(GroundLayer.LocalToMap(Position));
+    	TargetPosition = Position;
+		
+		// store initial state for reset
         InitialPosition = Position;
         InitialTile = GroundLayer.LocalToMap(Position);
 
@@ -259,8 +262,8 @@ public partial class PlayerCharacter : GridMover
 
     public void ResetToInitial()
     {
-        Position = InitialPosition;
-        TargetPosition = InitialPosition;
+        Position = GroundLayer.MapToLocal(InitialTile);
+    	TargetPosition = Position;
         CanMove = true;
         _directionIdx = 0;
    		ActiveDirection = Directions[_directionIdx];
