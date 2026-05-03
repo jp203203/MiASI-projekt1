@@ -106,6 +106,7 @@ public partial class LevelUI : Control
         _runButton.Text = "RUNNING...";
 		
 		_world.ResetWorld();
+		_playerCharacter.ClearQueue();
 
         // SYNTAX VALIDATION AND CODE EXECUTION HERE
         string text = _codeEditor.Text;

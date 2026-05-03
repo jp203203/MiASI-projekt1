@@ -307,4 +307,12 @@ public partial class PlayerCharacter : GridMover
     {
         commandQueue.Enqueue(command);
     }
+	
+	public void ClearQueue()
+	{
+		commandQueue.Clear();
+		_currentCommand = null;
+		_remainingMoveSteps = 0;
+		IsMoving = false;
+	}
 }
