@@ -19,7 +19,8 @@ public partial class PlayerCharacter : GridMover
     private int _directionIdx = 0;
     Vector2 ActiveDirection;
 
-    string PendingAction = "";
+	private PlayerCommand _currentCommand = null;
+	private int _remainingMoveSteps = 0;
     public bool HasShield = false;
     Node2D ShieldNode = null;
     Vector2 InitialPosition;
@@ -67,55 +68,93 @@ public partial class PlayerCharacter : GridMover
         _clock.Tick += OnTurnTick;
     }
 
-    private void OnTurnTick(int turnIndex)
-    {
-        if (!CanMove) return;
+    private async void OnTurnTick(int turnIndex)
+	{
+	    if (!CanMove || IsMoving)
+	        return;
 
-        // 1st priority - take action
-        if (PendingAction != "")
-        {
-            ExecutePendingAction();
-            PendingAction = "";
-            return;
-        }
+	    if (_currentCommand == null && commandQueue.Count == 0)
+	    {
+	        _clock.Reset();
+        	_clock.Pause();
+	        return;
+	    }
+		
+	    if (_currentCommand == null)
+	    {
+	        if (commandQueue.Count == 0)
+	            return;
 
-        // 2nd priority - move in pending direction
-        if (ActiveDirection != Vector2.Zero)
-        {
-            ExecutePendingMove();
-        }
-    }
+	        _currentCommand = commandQueue.Dequeue();
 
-    private void ExecutePendingAction()
-    {
-        switch (PendingAction)
-        {
-            case "shield":
-                ActivateShield();
-                break;
-            case "take":
-                TakeItem();
-                break;
-            case "drop":
-                DropItem();
-                break;
-            default:
-                GD.PushWarning("Unknown action: ", PendingAction);
-                break;
+	        if (_currentCommand.Type == PlayerCommandType.Move)
+	            _remainingMoveSteps = _currentCommand.IntParam;
+	    }
 
-        }
-    }
+	    await ExecuteCurrentCommandStep();
+	}
+	
+	private async Task ExecuteCurrentCommandStep()
+	{
+	    switch (_currentCommand.Type)
+	    {
+	        case PlayerCommandType.Move:
+	            await ExecuteMoveStep();
+	            break;
 
-    private async Task ExecutePendingMove()
-    {
-        Vector2I currentTile = GroundLayer.LocalToMap(Position);
-        Vector2I nextTile = currentTile + (Vector2I)(ActiveDirection);
+	        case PlayerCommandType.Rotate:
+	            Rotate(_currentCommand.StringParam);
+	            FinishCommand();
+	            break;
 
-        if (CanMoveFrom(currentTile, ActiveDirection) && CanMoveTo(nextTile, ActiveDirection))
-        {
-            await MoveToTile(nextTile);
-        }
-    }
+	        case PlayerCommandType.Take:
+	            TakeItem();
+	            FinishCommand();
+	            break;
+
+	        case PlayerCommandType.Drop:
+	            DropItem();
+	            FinishCommand();
+	            break;
+
+	        case PlayerCommandType.Shield:
+	            ActivateShield();
+	            FinishCommand();
+	            break;
+	    }
+	}
+	
+	private async Task ExecuteMoveStep()
+	{
+	    if (_remainingMoveSteps <= 0)
+	    {
+	        FinishCommand();
+	        return;
+	    }
+
+	    Vector2I currentTile = GroundLayer.LocalToMap(Position);
+	    Vector2I nextTile = currentTile + (Vector2I)ActiveDirection;
+
+	    if (!CanMoveFrom(currentTile, ActiveDirection) ||
+	        !CanMoveTo(nextTile, ActiveDirection))
+	    {
+	        FinishCommand();
+	        return;
+	    }
+
+	    await MoveToTile(nextTile);
+
+	    _remainingMoveSteps--;
+
+	    if (_remainingMoveSteps <= 0)
+	        FinishCommand();
+	}
+	
+	private void FinishCommand()
+	{
+	    _currentCommand = null;
+	    _remainingMoveSteps = 0;
+	}
 
     private async Task MoveToTile(Vector2I nextTile)
     {
@@ -223,8 +262,10 @@ public partial class PlayerCharacter : GridMover
         Position = InitialPosition;
         TargetPosition = InitialPosition;
         CanMove = true;
-        ActiveDirection = Directions[0];
-        PendingAction = "";
+        _directionIdx = 0;
+   		ActiveDirection = Directions[_directionIdx];
+		_currentCommand = null;
+		_remainingMoveSteps = 0;
         IsMoving = false;
 
         if (HasShield) BreakShield();
@@ -232,15 +273,15 @@ public partial class PlayerCharacter : GridMover
 
     public void Rotate(string direction)
     {
-        if (direction != "left" || direction != "right")
+        if (direction != "LEFT" && direction != "RIGHT")
             GD.PushError("Incorrect rotation direction");
 
         switch (direction)
         {
-            case "right":
+            case "RIGHT":
                 _directionIdx = (_directionIdx + 1) % 4;
                 break;
-            case "left":
+            case "LEFT":
                 _directionIdx = (_directionIdx - 1 + 4) % 4;
                 break;
         }

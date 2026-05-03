@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cao7gho5ku831"]
 
 [ext_resource type="Texture2D" uid="uid://pf6ul4jggqxl" path="res://assets/ui/plus.png" id="1_r8lg5"]
-[ext_resource type="Script" uid="uid://d17rgndlr5h16" path="res://scenes/ui/LevelUI.cs" id="1_xwin6"]
+[ext_resource type="Script" uid="uid://d17rgndlr5h16" path="res://scripts/grammar/LevelUI.cs" id="1_xwin6"]
 [ext_resource type="Texture2D" uid="uid://didaq1kemu2vi" path="res://assets/ui/minus.png" id="2_xwin6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r8lg5"]

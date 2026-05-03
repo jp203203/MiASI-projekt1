@@ -104,6 +104,8 @@ public partial class LevelUI : Control
 
         _runButton.Disabled = true;
         _runButton.Text = "RUNNING...";
+		
+		_world.ResetWorld();
 
         // SYNTAX VALIDATION AND CODE EXECUTION HERE
         string text = _codeEditor.Text;
@@ -117,17 +119,17 @@ public partial class LevelUI : Control
 
             var tree = parser.program();
 
-            var player = GetNodeOrNull<PlayerCharacter>("PlayerCharacter");
-
-            if (player == null)
+            if (_playerCharacter == null)
             {
                 GD.PrintErr("Player node not found!");
                 return;
             }
             
-            var visitor = new GameVisitor(player);
+            var visitor = new GameVisitor(_playerCharacter);
             object result = visitor.Visit(tree);
-            player.DebugPrintQueue();
+            _playerCharacter.DebugPrintQueue();
+			
+			_world.StartCodeExecution();
 
             _errorDisplay.Text = $"Result: {result}";
         }
@@ -141,7 +143,7 @@ public partial class LevelUI : Control
             OnLevelCompleted();
 
         // reset world after code execution
-        _world.ResetWorld();
+        //_world.ResetWorld();
 
         _runButton.Disabled = false;
         _runButton.Text = "▶   RUN";
