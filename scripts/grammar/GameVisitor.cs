@@ -232,13 +232,19 @@ public class GameVisitor : GameBaseVisitor<object>
 	
 	public override object VisitPredicate(Game.PredicateContext context)
 	{
-		string text = context.GetText();
+	    string direction = context.direction().GetText();
 
-		// temp
-		GD.Print("Evaluating predicate: " + text);
+	    if (context.ITEM_TO() != null)
+	    {
+	        return player.HasItemInDirection(direction);
+	    }
 
-		// temp result
-		return false;
+	    if (context.OBSTACLE_TO() != null)
+	    {
+	        return player.HasObstacleInDirection(direction);
+	    }
+
+	    throw new Exception("Unknown predicate");
 	}
 	
 	public override object VisitMulDivExpr(Game.MulDivExprContext context)

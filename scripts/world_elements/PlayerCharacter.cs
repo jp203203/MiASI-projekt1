@@ -199,6 +199,38 @@ public partial class PlayerCharacter : GridMover
 
         return true;
     }
+	
+	private Vector2 DirectionFromString(string direction)
+	{
+	    switch (direction)
+	    {
+	        case "UP": return Vector2.Up;
+	        case "DOWN": return Vector2.Down;
+	        case "LEFT": return Vector2.Left;
+	        case "RIGHT": return Vector2.Right;
+	        default:
+	            GD.PushError($"Unknown direction: {direction}");
+	            return Vector2.Zero;
+	    }
+	}
+	
+	public bool HasItemInDirection(string direction)
+	{
+	    Vector2 dir = DirectionFromString(direction);
+	    Vector2I tile = ItemLayer.LocalToMap(Position) + (Vector2I)dir;
+
+	    TileData item = ItemLayer.GetCellTileData(tile);
+
+	    return item != null && (bool)item.GetCustomData("IsItem");
+	}
+
+	public bool HasObstacleInDirection(string direction)
+	{
+	    Vector2 dir = DirectionFromString(direction);
+	    Vector2I tile = GroundLayer.LocalToMap(Position) + (Vector2I)dir;
+
+	    return IsTileBlocked(tile, false);
+	}
 
     private void ActivateShield()
     {
