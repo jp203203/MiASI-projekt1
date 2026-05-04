@@ -93,6 +93,8 @@ public partial class LevelUI : Control
             GD.PushError("World scene must have both PlayerCharacter and Camera2D nodes");
             return;
         }
+		
+		_playerCharacter.ExecutionFinished += OnPlayerExecutionFinished;
 
         // get world bounds
         _worldBounds = _world.GetWorldBounds();
@@ -140,8 +142,8 @@ public partial class LevelUI : Control
         }
 
         // check if level was completed
-        if (_world.IsLevelComplete())
-            OnLevelCompleted();
+        //if (_world.IsLevelComplete())
+            //OnLevelCompleted();
 
         // reset world after code execution
         //_world.ResetWorld();
@@ -149,10 +151,18 @@ public partial class LevelUI : Control
         _runButton.Disabled = false;
         _runButton.Text = "▶   RUN";
     }
+	
+	private void OnPlayerExecutionFinished()
+	{
+	    GD.Print("Player finished executing commands!");
+
+	    if (_world.IsLevelComplete())
+            OnLevelCompleted();
+	}
 
     private void OnLevelCompleted()
     {
-        Console.WriteLine("Level completed!");  // nothing more here since we're not adding campaign or progression - nothing to unlock
+        GD.Print("Level completed!");  // nothing more here since we're not adding campaign or progression - nothing to unlock
     }
 
     private void OnCodeChanged()

@@ -10,6 +10,9 @@ public partial class PlayerCharacter : GridMover
     [Export] bool CanMove = true;
     [Export] PackedScene ShieldScene;
     [Export] public ItemManager ItemManager;
+	
+	[Signal]
+	public delegate void ExecutionFinishedEventHandler();
 
     private Queue<PlayerCommand> commandQueue = new Queue<PlayerCommand>();
     
@@ -80,6 +83,9 @@ public partial class PlayerCharacter : GridMover
 	    {
 	        _clock.Reset();
         	_clock.Pause();
+			
+			EmitSignal(SignalName.ExecutionFinished);
+			
 	        return;
 	    }
 		
