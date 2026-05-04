@@ -13,9 +13,7 @@ ShieldScene = ExtResource("2_fsoqc")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1467741725]
 z_index = 2
-position = Vector2(16, 16)
 texture = ExtResource("1_fgt8d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2111449572]
-position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_8xf31")
