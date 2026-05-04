@@ -208,6 +208,7 @@ public partial class PlayerCharacter : GridMover
         ShieldNode = (Node2D)ShieldScene.Instantiate();
         ShieldNode.Modulate = new Color(1, 1, 1, 0.5f);
         ShieldNode.ZIndex = 3;
+		ShieldNode.Position = GetNode<CollisionShape2D>("CollisionShape2D").GetPosition();
         AddChild(ShieldNode);
 
         HasShield = true;
