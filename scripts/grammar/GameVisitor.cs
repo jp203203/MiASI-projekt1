@@ -64,28 +64,54 @@ public class GameVisitor : GameBaseVisitor<object>
 	
 	public override object VisitIfStatement(Game.IfStatementContext context)
 	{
-		bool conditionResult = (bool)Visit(context.condition());
-		
-		if (conditionResult)
-		{
-			Visit(context.block(0));
-		}
-		else if (context.ELSE() != null)
-		{
-			Visit(context.block(1));
-		}
-		
-		return null;
+	    var savedQueue = player.CaptureQueue();
+
+	    // THEN
+	    player.ClearQueue();
+	    Visit(context.block(0));
+	    var thenBody = player.DrainQueueToList();
+
+	    // ELSE (if exists)
+	    List<PlayerCommand> elseBody = null;
+
+	    if (context.ELSE() != null)
+	    {
+	        player.ClearQueue();
+	        Visit(context.block(1));
+	        elseBody = player.DrainQueueToList();
+	    }
+
+	    player.RestoreQueue(savedQueue);
+
+	    player.EnqueueCommand(new PlayerCommand(PlayerCommandType.If)
+	    {
+	        Condition = () => (bool)Visit(context.condition()),
+	        ThenBody = thenBody,
+	        ElseBody = elseBody
+	    });
+
+	    return null;
 	}
 	
 	public override object VisitWhileStatement(Game.WhileStatementContext context)
 	{
-		while ((bool)Visit(context.condition()))
-		{
-			Visit(context.block());
-		}
+	    var savedQueue = player.CaptureQueue();
 
-		return null;
+	    player.ClearQueue();
+
+	    Visit(context.block());
+
+	    var bodyCommands = player.DrainQueueToList();
+
+	    player.RestoreQueue(savedQueue);
+
+	    player.EnqueueCommand(new PlayerCommand(PlayerCommandType.While)
+	    {
+	        Condition = () => (bool)Visit(context.condition()),
+	        Body = bodyCommands
+	    });
+
+	    return null;
 	}
 	
 	public override object VisitRepeatStatement(Game.RepeatStatementContext context)

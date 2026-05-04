@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public enum PlayerCommandType
 {
@@ -6,7 +7,9 @@ public enum PlayerCommandType
 	Rotate,
 	Take,
 	Drop,
-	Shield
+	Shield,
+	If,
+	While,
 }
 
 public class PlayerCommand
@@ -15,6 +18,15 @@ public class PlayerCommand
 
 	public int IntParam;
 	public string StringParam;
+	
+	public Func<bool> Condition;
+	
+	// IF
+    public List<PlayerCommand> ThenBody;
+    public List<PlayerCommand> ElseBody;
+
+    // WHILE
+    public List<PlayerCommand> Body;
 
 	public PlayerCommand(PlayerCommandType type, int intParam = 0, string stringParam = null)
 	{

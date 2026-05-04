@@ -94,37 +94,90 @@ public partial class PlayerCharacter : GridMover
 	            _remainingMoveSteps = _currentCommand.IntParam;
 	    }
 
-	    await ExecuteCurrentCommandStep();
+	    while (true)
+		{
+		    if (_currentCommand == null)
+		    {
+		        if (commandQueue.Count == 0)
+		            return;
+
+		        _currentCommand = commandQueue.Dequeue();
+
+		        if (_currentCommand.Type == PlayerCommandType.Move)
+		            _remainingMoveSteps = _currentCommand.IntParam;
+		    }
+
+		    bool consumedTick = await ExecuteCurrentCommandStep();
+
+		    if (consumedTick)
+		        break;
+		}
 	}
 	
-	private async Task ExecuteCurrentCommandStep()
+	private async Task<bool> ExecuteCurrentCommandStep()
 	{
 	    switch (_currentCommand.Type)
 	    {
 	        case PlayerCommandType.Move:
 	            await ExecuteMoveStep();
-	            break;
+	            return true;
 
 	        case PlayerCommandType.Rotate:
 	            Rotate(_currentCommand.StringParam);
 	            FinishCommand();
-	            break;
+	            return true;
 
 	        case PlayerCommandType.Take:
 	            TakeItem();
 	            FinishCommand();
-	            break;
+	            return true;
 
 	        case PlayerCommandType.Drop:
 	            DropItem();
 	            FinishCommand();
-	            break;
+	            return true;
 
 	        case PlayerCommandType.Shield:
 	            ActivateShield();
 	            FinishCommand();
-	            break;
+	            return true;
+
+			case PlayerCommandType.If:
+			{
+			    bool result = _currentCommand.Condition();
+
+			    List<PlayerCommand> chosen = result
+			        ? _currentCommand.ThenBody
+			        : _currentCommand.ElseBody;
+
+			    if (chosen != null && chosen.Count > 0)
+			    {
+			        commandQueue = new Queue<PlayerCommand>(
+			            chosen.Concat(commandQueue)
+			        );
+			    }
+
+			    FinishCommand();
+			    return false;
+			}
+			
+			case PlayerCommandType.While:
+			    if (_currentCommand.Condition())
+			    {
+			        var newQueue = new Queue<PlayerCommand>(
+			            _currentCommand.Body
+			                .Concat(new[] { _currentCommand })
+			                .Concat(commandQueue)
+			        );
+
+			        commandQueue = newQueue;
+			    }
+
+			    FinishCommand();
+			    return false;
 	    }
+
+	    return true;
 	}
 	
 	private async Task ExecuteMoveStep()
@@ -347,5 +400,27 @@ public partial class PlayerCharacter : GridMover
 		_currentCommand = null;
 		_remainingMoveSteps = 0;
 		IsMoving = false;
+	}
+	
+	public Queue<PlayerCommand> CaptureQueue()
+	{
+	    return new Queue<PlayerCommand>(commandQueue);
+	}
+
+	public void RestoreQueue(Queue<PlayerCommand> savedQueue)
+	{
+	    commandQueue = new Queue<PlayerCommand>(savedQueue);
+	}
+	
+	public List<PlayerCommand> DrainQueueToList()
+	{
+	    var list = new List<PlayerCommand>();
+
+	    while (commandQueue.Count > 0)
+	    {
+	        list.Add(commandQueue.Dequeue());
+	    }
+
+	    return list;
 	}
 }
