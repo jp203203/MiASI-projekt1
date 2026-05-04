@@ -317,7 +317,7 @@ public partial class PlayerCharacter : GridMover
 
         Vector2I itemTile = ItemLayer.LocalToMap(Position) + (Vector2I)ActiveDirection;
 
-        if (IsTileBlocked(itemTile, true)) return;  // if there is anything else blocking the way - return (item shouldn't be there)
+        if (IsTileBlocked(itemTile)) return;  // if there is anything else blocking the way - return (item shouldn't be there)
 
         TileData item = ItemLayer.GetCellTileData(itemTile);
 
@@ -334,7 +334,7 @@ public partial class PlayerCharacter : GridMover
 
         Vector2I itemTile = ItemLayer.LocalToMap(Position) + (Vector2I)ActiveDirection;
 
-        if (IsTileBlocked(itemTile, true)) return;  // can't drop an item if there's something blocking the way
+        if (IsTileBlocked(itemTile)) return;  // can't drop an item if there's something blocking the way
 
         TileData item = ItemLayer.GetCellTileData(itemTile);
 
@@ -356,6 +356,7 @@ public partial class PlayerCharacter : GridMover
 		_currentCommand = null;
 		_remainingMoveSteps = 0;
         IsMoving = false;
+		_itemTaken = false;
 
         if (HasShield) BreakShield();
     }
