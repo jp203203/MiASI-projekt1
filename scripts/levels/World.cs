@@ -10,6 +10,7 @@ public partial class World : Node2D
     public PlayerCharacter PlayerCharacter;
     public TileMapLayer BoundaryLayer;
     public WallShooterManager WallShooterManager;
+	public ItemManager ItemManager;
 
     private Clock _clock = Clock.Instance;
     private List<Node> _activeArrows = new();
@@ -20,6 +21,7 @@ public partial class World : Node2D
         PlayerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
         BoundaryLayer = GetNode<TileMapLayer>("TileLayerContainer/BoundaryLayer");
         WallShooterManager = GetNode<WallShooterManager>("WallShooterManager");
+		ItemManager = GetNode<ItemManager>("ItemManager");
 
         if (_levelData != null) 
             PassShooterData();
@@ -66,6 +68,7 @@ public partial class World : Node2D
         // reset player character position and shooter states
         PlayerCharacter.ResetToInitial();
         WallShooterManager.ResetShooters();
+		ItemManager.ResetItems();
 
         _clock.Reset();
         _clock.Pause();
