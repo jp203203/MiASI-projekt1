@@ -357,6 +357,7 @@ public partial class PlayerCharacter : GridMover
 		_remainingMoveSteps = 0;
         IsMoving = false;
 		_itemTaken = false;
+		ItemManager.ResetItems();
 
         if (HasShield) BreakShield();
     }

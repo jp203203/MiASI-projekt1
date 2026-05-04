@@ -1,9 +1,24 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class ItemManager : Node
 {
     [Export] private TileMapLayer _itemLayer;
+	
+	private Dictionary<Vector2I, (int sourceId, Vector2I atlasCoords)> _initialTiles
+    = new();
+	
+	public override void _Ready()
+	{
+	    foreach (var cell in _itemLayer.GetUsedCells())
+	    {
+	        _initialTiles[cell] = (
+	            _itemLayer.GetCellSourceId(cell),
+	            _itemLayer.GetCellAtlasCoords(cell)
+	        );
+	    }
+	}
 
     public void PlaceItem(Vector2I itemTile)
     {
@@ -59,4 +74,17 @@ public partial class ItemManager : Node
             }
         }
     }
+	
+	public void ResetItems()
+	{
+	    _itemLayer.Clear();
+
+	    foreach (var kvp in _initialTiles)
+	    {
+	        var tile = kvp.Key;
+	        var (sourceId, atlasCoords) = kvp.Value;
+
+	        _itemLayer.SetCell(tile, sourceId, atlasCoords);
+	    }
+	}
 }
