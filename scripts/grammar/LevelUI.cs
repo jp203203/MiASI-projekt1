@@ -104,7 +104,6 @@ public partial class LevelUI : Control
     {
         _errorDisplay.Text = "";  // clear the error display
 
-        _runButton.Disabled = true;
         _runButton.Text = "RUNNING...";
 		
 		_world.ResetWorld();
@@ -141,21 +140,12 @@ public partial class LevelUI : Control
         {
             _errorDisplay.Text = $"Error: {ex.Message}";
         }
-
-        // check if level was completed
-        //if (_world.IsLevelComplete())
-            //OnLevelCompleted();
-
-        // reset world after code execution
-        //_world.ResetWorld();
-
-        _runButton.Disabled = false;
-        _runButton.Text = "▶   RUN";
     }
 	
 	private void OnPlayerExecutionFinished()
 	{
 	    GD.Print("Player finished executing commands!");
+		_runButton.Text = "▶   RUN";
 
 	    if (_world.IsLevelComplete())
             OnLevelCompleted();
