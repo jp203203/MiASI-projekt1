@@ -368,6 +368,7 @@ public partial class PlayerCharacter : GridMover
 		_remainingMoveSteps = 0;
         IsMoving = false;
 		_itemTaken = false;
+		_sprite.RotationDegrees = _directionIdx * 90;
 
         if (HasShield) BreakShield();
     }

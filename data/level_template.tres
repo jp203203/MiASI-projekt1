@@ -4,4 +4,4 @@
 
 [resource]
 script = ExtResource("1_u27om")
-GoalPosition = Vector2i(4, 0)
+GoalPosition = Vector2i(31, 37)
