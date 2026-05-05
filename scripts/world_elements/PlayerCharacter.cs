@@ -30,6 +30,8 @@ public partial class PlayerCharacter : GridMover
     Vector2I InitialTile;
 
     private bool _itemTaken = false;
+	
+	private Sprite2D _sprite;
 
     // special tile movement rules
     static readonly Dictionary<string, Dictionary<string, Vector2[]>> TileRules = new()
@@ -72,6 +74,9 @@ public partial class PlayerCharacter : GridMover
 
         // connect to turn clock
         _clock.Tick += OnTurnTick;
+		
+		_sprite = GetNode<Sprite2D>("Sprite2D");
+		_sprite.RotationDegrees = _directionIdx * 90;
     }
 
     private async void OnTurnTick(int turnIndex)
@@ -383,6 +388,7 @@ public partial class PlayerCharacter : GridMover
         }
 
         ActiveDirection = Directions[_directionIdx];
+		_sprite.RotationDegrees = _directionIdx * 90;
     }
     
     public void DebugPrintQueue()

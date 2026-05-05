@@ -11,6 +11,7 @@ public partial class World : Node2D
     public TileMapLayer BoundaryLayer;
     public WallShooterManager WallShooterManager;
 	public ItemManager ItemManager;
+	public Label LevelCompleted;
 
     private Clock _clock = Clock.Instance;
     private List<Node> _activeArrows = new();
@@ -22,6 +23,9 @@ public partial class World : Node2D
         BoundaryLayer = GetNode<TileMapLayer>("TileLayerContainer/BoundaryLayer");
         WallShooterManager = GetNode<WallShooterManager>("WallShooterManager");
 		ItemManager = GetNode<ItemManager>("ItemManager");
+		LevelCompleted = GetNode<Label>("CanvasLayer/LevelCompleted");
+		
+		LevelCompleted.Hide();
 
         if (_levelData != null) 
             PassShooterData();

@@ -109,6 +109,7 @@ public partial class LevelUI : Control
 		
 		_world.ResetWorld();
 		_playerCharacter.ClearQueue();
+		_world.LevelCompleted.Hide();
 
         // SYNTAX VALIDATION AND CODE EXECUTION HERE
         string text = _codeEditor.Text;
@@ -129,12 +130,12 @@ public partial class LevelUI : Control
             }
             
             var visitor = new GameVisitor(_playerCharacter);
-            object result = visitor.Visit(tree);
+            object errors = visitor.Visit(tree);
             _playerCharacter.DebugPrintQueue();
 			
 			_world.StartCodeExecution();
 
-            _errorDisplay.Text = $"Result: {result}";
+            _errorDisplay.Text = $"{errors}";
         }
         catch (Exception ex)
         {
@@ -163,6 +164,7 @@ public partial class LevelUI : Control
     private void OnLevelCompleted()
     {
         GD.Print("Level completed!");  // nothing more here since we're not adding campaign or progression - nothing to unlock
+		_world.LevelCompleted.Show();
     }
 
     private void OnCodeChanged()
