@@ -208,9 +208,11 @@ public partial class LevelUI : Control
         highlighter.AddKeywordColor("ELSE", orange);
         highlighter.AddKeywordColor("WHILE", orange);
         highlighter.AddKeywordColor("REPEAT", orange);
+		highlighter.AddKeywordColor("PROCEDURE", orange);
 		highlighter.AddKeywordColor("ENDIF", orange);
 		highlighter.AddKeywordColor("ENDWHILE", orange);
 		highlighter.AddKeywordColor("ENDREPEAT", orange);
+		highlighter.AddKeywordColor("ENDPROC", orange);
 
         // other keywords
         highlighter.AddKeywordColor("LEFT", yellow);
